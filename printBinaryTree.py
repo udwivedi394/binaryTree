@@ -1,5 +1,5 @@
-import binaryHeap as bHeap
-import binaryHeapUtility as bHeap2
+#import binaryHeap as bHeap
+#import binaryHeapUtility as bHeap2
 
 class bTree:
 	def __init__(self,key):
@@ -52,6 +52,52 @@ def levelOrder(root):
 			n -= 1
 		print
 	return	
+
+#In Order traversal (left,root,right)
+def inOrder(root):
+	stack = []
+	curNode = root
+
+	while 1:
+		while curNode:
+			stack.append(curNode)
+			curNode = curNode.left
+		
+		if curNode==None and len(stack):
+			curNode = stack.pop()
+			print curNode.data,
+			curNode = curNode.right
+		
+		if len(stack)==0 and curNode==None:
+			break
+	return	
+
+#This function prints all the nodes of the tree that are visible from top view of tree
+def topViewTree(root):
+	queue = []
+	temp = root
+	queue.append([0,temp])
+	hashmap = {}
+
+	while len(queue):
+		n = nodeCount = len(queue)
+
+		while n:
+			node = queue.pop(0)
+			val = node[0]
+			temp = node[1]
+
+			if temp.left:
+				queue.append([val-1,temp.left])
+			if temp.right:
+				queue.append([val+1,temp.right])
+
+			if hashmap.get(val)==None:
+				print temp.data,
+				hashmap[val] = temp.data
+			n -= 1
+	return	
+
 #Prints the left most and right most nodes at each level
 def printLeftRightMost(root):
 	#Initialise the queue
@@ -94,54 +140,6 @@ def printLeftRightMostAlternate(root):
 
 	#Flag to identify left most node
 	left = False
-	leftNode = None
-
-	alternate = False
-	#Enqueue the root node to the queue, stucture is [level_of_node, node]
-	queue.append([1, temp])
-	print
-	while len(queue):
-		node = queue.pop(0)
-		level = node[0]
-		temp = node[1]
-		
-		#Store the nodes along with their levels in queue
-		if temp.left:
-			queue.append([level+1, temp.left])
-		if temp.right:
-			queue.append([level+1, temp.right])
-
-		#if current node is left most node
-		if left:
-			if alternate:
-				print temp.data,
-				left = False
-				#store the leftmost address in leftNode
-				leftNode = temp
-			elif len(queue)==0:
-				print temp.data
-
-		#If the level of next node in queue is greater than current level, then this is the right most node
-		if len(queue) and queue[0][0] > level:
-			#This condition will be true when there is only 1 node at current level
-			if leftNode != temp:
-				if alternate==False:
-					print temp.data,
-					alternate = True
-				else:
-					alternate = False
-			#The next node is going to be left Most, so set it True
-			left = True
-	return
-
-#Prints the left most and right most nodes at each level
-def printLeftRightMostAlternate02(root):
-	#Initialise the queue
-	queue = []
-	temp = root
-
-	#Flag to identify left most node
-	left = False
 
 	#Enqueue the root node to the queue, stucture is [level_of_node, node]
 	queue.append(temp)
@@ -167,12 +165,61 @@ def printLeftRightMostAlternate02(root):
 			n -= 1
 		left ^= True
 	return
+
+def diagonalTraversal(root):
+	#Initialize the hashmap with root as initial entry and 0 as slope
+	hashmap = {0: [root.data]}
+
+	#Initialize the queue with first node as [slope_val, node]
+	queue = [[0, root]]
+
+	#To count the number of levels in the tree, to be used later as.. 
+	#..means of printing the diagonals from hashmap
+	levels = 0
+
+	while len(queue):
+		#gives the number of nodes at current level
+		n = len(queue)
+		while n:
+			node = queue.pop(0)
+			val = node[0]
+			temp = node[1]
+
+			#for left child, the data gets appended to current_slope+1 value in hashmap
+			if temp.left:
+				if hashmap.get(val+1)==None:
+					hashmap[val+1] = [temp.left.data]
+				else:
+					hashmap[val+1].append(temp.left.data)
+				queue.append([val+1, temp.left])
+
+			#for right child, the data is appended to same current_slope value in hashmap
+			if temp.right:
+				if hashmap.get(val)==None:
+					hashmap[val] = [temp.right.data]
+				else:
+					hashmap[val].append(temp.right.data)
+				queue.append([val, temp.right])
+
+			n -= 1
+		levels += 1
+	print
+	try:
+		for i in range(0,levels):
+			print hashmap[i]
+	except KeyError:
+		pass	
+	return
+
 root = bTree(1)
 root.left = bTree(2)
 root.left.left = bTree(4)
 root.left.right = bTree(5)
 root.right = bTree(3)
 root.right.left = bTree(6)
+root.right.left.right = bTree(28)
+root.right.left.right.right = bTree(29)
+root.right.left.right.right.right = bTree(30)
 root.right.right = bTree(7)
 root.right.right.right = bTree(8)
 root.right.right.right.left = bTree(9)
@@ -213,5 +260,8 @@ root2.right.right.right.right.left = bTree(32)
 #bHeap2.printGivenHeap(arr)
 
 levelOrder(root2)
-printLeftRightMost(root2)
-printLeftRightMostAlternate02(root2)
+#printLeftRightMost(root2)
+#printLeftRightMostAlternate02(root2)
+#inOrder(root2)
+topViewTree(root2)
+diagonalTraversal(root2)
