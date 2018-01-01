@@ -9,3 +9,15 @@ This project contains following operations on Binary Tree
 lowestCommonAncestor.py
 6. Print the lowest common ancestor of two nodes in a binary Tree
 7. Print the distance between two nodes in binary Tree
+
+maxDiffAncestor.py
+8. Print the maximum difference between the node and its ancestors(all of them)
+
+cloneBinTree.py
+9. Clone the binary Tree with Random pointer.
+10. Two methods implemented
+11. Ist Method: Using Hashmap, Time Complexity: O(n), Space Complexity: O(1)
+12. IInd Method: Temperory Modification of original Binary Tree, Time complexity: O(n), Space: O(1)
+
+checkLargestBST.py
+13. Returns the BST with maximum number of nodes in a binary Tree 
