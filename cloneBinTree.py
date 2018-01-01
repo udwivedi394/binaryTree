@@ -1,9 +1,10 @@
 class Node:
-	def __init__(self,data):
+	def __init__(self,data,which="M"):
 		self.data = data
 		self.left = None
 		self.right = None
 		self.random = None
+		self.which = which
 
 #Time complexity: O(n)
 #Space complexity: O(n)
@@ -23,7 +24,7 @@ def cloneBT(root):
 
 		while temp==None and len(stack):
 			temp = stack.pop()
-			hashmap[temp] = Node(temp.data)
+			hashmap[temp] = Node(temp.data,"C")
 			temp = temp.right
 
 		if temp==None and len(stack)==0:
@@ -50,6 +51,74 @@ def cloneBT(root):
 			break
 	return hashmap[root]
 
+#Time Complexity: O(n)
+#Space Complexity: O(1)
+def cloneBT02(root):
+	temp = root
+	stack = []
+	
+	#First traversal: Insert Clone node to left of each node
+	while 1:
+		while temp:
+			stack.append(temp)
+			temp = temp.left
+
+		while temp==None and len(stack):
+			temp = stack.pop()
+			#Inserting clone node in left between the nodes
+			leftNode = temp.left
+			temp.left = Node(temp.data,"C")
+			temp.left.left = leftNode
+
+			temp = temp.right
+
+		if temp==None and len(stack)==0:
+			break
+
+	#2nd Traversal: To assign the random pointers
+	temp = root
+	while 1:
+		while temp:
+			stack.append(temp)
+			temp = temp.left
+
+		while temp==None and len(stack):
+			temp = stack.pop()
+			#Assign left of random of current Node to random of left of current Node
+			if temp.random:			
+				temp.left.random = temp.random.left
+			temp = temp.right
+
+		if temp==None and len(stack)==0:
+			break
+
+	#3rd Travesal: Restore the trees to their linkages
+	temp = root
+	cloneRoot = root.left
+	while 1:
+		while temp:
+			stack.append(temp)
+	
+			cloneNode = temp.left
+			curNode = temp
+			
+			#Assign the left of left of curNode to the left of current Node
+			curNode.left = curNode.left.left
+			if curNode.right:
+				cloneNode.right = curNode.right.left
+			if cloneNode.left:
+				cloneNode.left = cloneNode.left.left
+			temp = temp.left
+
+		while temp==None and len(stack):
+			temp = stack.pop()
+			temp = temp.right	
+
+		if temp==None and len(stack)==0:
+			break
+	
+	return cloneRoot
+
 def inOrder(root):
 	temp = root
 	stack = []
@@ -61,7 +130,7 @@ def inOrder(root):
 
 		while temp==None and len(stack):
 			temp = stack.pop()
-			print (temp.data,temp.random.data if temp.random else None),
+			print (temp.data,temp.random.data if temp.random else None,temp.which),
 			temp = temp.right
 
 		if temp==None and len(stack)==0:
@@ -91,5 +160,7 @@ r1.random = l4
 print "Original Tree:"
 inOrder(root)
 print "\nClone Tree:"
-cloneRoot = cloneBT(root)
+cloneRoot = cloneBT02(root)
+inOrder(root)
+print
 inOrder(cloneRoot)
