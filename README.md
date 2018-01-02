@@ -27,3 +27,6 @@ bottomView.py
 
 specialTreePreOrder.py
 15. Converts the given preOrder traversal data into Special Binary Tree, where every node has either 0 or 2 children
+
+ksumPath.py
+16. Prints all the available path in Binary Tree with sum equal to given k
