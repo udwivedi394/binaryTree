@@ -104,8 +104,11 @@ def cloneBT02(root):
 			
 			#Assign the left of left of curNode to the left of current Node
 			curNode.left = curNode.left.left
+
+			#If there is a right child present then add the left of right to the right of cloneNOde
 			if curNode.right:
 				cloneNode.right = curNode.right.left
+			#Restore the cloneNode
 			if cloneNode.left:
 				cloneNode.left = cloneNode.left.left
 			temp = temp.left
