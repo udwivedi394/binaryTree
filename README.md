@@ -24,3 +24,6 @@ checkLargestBST.py
 
 bottomView.py
 14. Prints the bottom View of given Binary Tree
+
+specialTreePreOrder.py
+15. Converts the given preOrder traversal data into Special Binary Tree, where every node has either 0 or 2 children
