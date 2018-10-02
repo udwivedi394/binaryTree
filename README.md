@@ -9,6 +9,3 @@ This project contains following operations on Binary Tree
 lowestCommonAncestor.py
 6. Print the lowest common ancestor of two nodes in a binary Tree
 7. Print the distance between two nodes in binary Tree
-
-maxDiffAncestor.py
-8. Print the maximum difference between the node and its ancestors(all of them)
